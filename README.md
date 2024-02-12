@@ -34,3 +34,58 @@ After the grouping has been done, a for loop is created with the variable catego
 
 Moreover, the only categories that have been matched so far have been Eating Out and Subscriptions. The final two dataframes look as follows:
 ![image](https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/243f82c2-7834-4315-ad28-8667b42cc345)
+
+
+February 11th. 2024.
+In these past few days I've encountered several new issues and solutions. I will briefly summarize them here:
+1. Change of email address selection method
+   I went from having a single key and value with my_mail.search() method to creating a list with the desired addresses to receive emails from and then running a for loop through, it only appending mails to a newly created empty list, called search_results_list, if the status of the method was 'OK'. This allows the versatility of having as many senders as desired with only having to include them in email_addresses_to_extract. 
+2. Creation of counts to monitor the type of data being handled and debug. Had four categorie that included the following:
+   <img width="498" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/2b8c3c50-5684-4fd0-bf52-64e31daad4b1">
+3. Learnt to use try: and except: to find and handle anormalities. Scotiabank sends several types of mails through the same sender which had the code return errors constantly, given that we only wanted to extract credit cards statements. So monthly statements, payments to the credit card and other type of emails began posing error problems.
+4. Change of data extraction from mails block 2.1. given that the change of method in block 1.3. made this block return Nones in the data extraction part of each message. Block 2.1. includes data extraction from emails and extraction of senders information (SENDER and SUBJECT). It is worth noting that the sender's information has to be extracted in this manner now because the new method was not giving a compatible output with the 'RFC822' standard.
+   <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/6b846135-5bcf-43c9-ae2d-510899af027e">
+5. The extraction of the header became an issue because it was completelly illegible. Decoding it to base64 was the answer.
+  Subject Decoding:Used email.header.decode_header to decode the subject.
+  If the subject is encoded in base64, decoded it using base64.b64decode.
+  Checked for the subject's type (bytes) and decoded accordingly.
+7. Store Name, USD Amount and Date Extraction:
+  Used regular expressions to extract store names, USD amounts, and transaction dates.
+  Applied specific patterns to match the desired information in the email body.
+8. Used re.search to find matches in the body. I still have a pending of making Scotiabanks regex pattern more robust. CURENT ISSUE, not all names are taken in properly. If there’s special characters in/after the name, it is cut out, for example: The Grove in SFO whose name is ‘TST* The Grove - Yerba Bu’ is cut out only TST, which will not give enough context when reading the final results.
+9. For the transaction date, removed extra characters and applied strip() before converting to datetime.
+  Stripping Extra Spaces in Date:
+  Applied strip() directly when converting the string to datetime to remove any leading or trailing spaces.
+10. Removed undesired email types. I.e: bank statements and credit card payments. These amount to about 10% of all Scotiabank emails.
+    Current email count:
+    <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/95ef9da3-1ee0-4a9d-9e29-784636e122f7">
+11. Verified accuracy of BAC data extraction. No issues were found. Proceed to comment all debuging printing statements.
+12. Verified accurady of Scotiabank data extraction. Issues found:
+    Must take emails that are not credit card expenses out of the equation.
+    Email count before this issue is addressed:
+    <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/59eccd27-555b-46e0-a256-25c63be9ec14">
+    Once a regex pattern is applied to match along with the senders address for scotiabank. Our email count is updated to:
+    <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/4048cbf4-9fb2-42fb-ad03-f8f2dfd615b6">
+    Thus reducing undesired emails to 0.
+
+This way, our code's output is updated to
+  <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/c3c94cd1-e4ef-4fb0-b942-5ce0b9a941c7">
+
+13. Transforming Bank Dictionaries into DataFrames: Transformed both bank dictionaries of expenses into dataframes.
+  <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/bebb119a-9791-4d90-a77b-04861475ed8c">
+
+It is through this that I see a disparity in the total amount of rows in the dataframe and the amount of emails totaled in the count below.
+Upon further inspection, two issues arise:
+1. Unmatched BAC emails due to a lack of matching in the USD amount (in Colombian Pesos).
+   <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/cb0350c8-919b-4fe4-8b71-160caa979e1d">
+2. Mismatch in Scotiabank's emails due to establishment names beginning with numbers.
+   <img width="1351" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/8c8649eb-20dc-46dc-b06a-669198f61db2">
+
+   Disparity in Total Rows and Email Count:
+Identified two issues:
+
+Next Steps:
+
+Address regex pattern issues for both banks to include other currencies.
+Make establishment name collection more flexible to allow names beginning with numbers.
+This journey continues...
