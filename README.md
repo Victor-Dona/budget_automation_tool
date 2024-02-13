@@ -89,3 +89,21 @@ Next Steps:
 Address regex pattern issues for both banks to include other currencies.
 Make establishment name collection more flexible to allow names beginning with numbers.
 This journey continues...
+
+
+February 12th, 2024.
+Today was a great day for debugging and deepening knowledge about filtering, loc, and the legendary 'SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame' that pops up when slicing through a view instead of the main DataFrame in pandas. 
+
+1. Added the new category column
+2. Transformed the 'Transaction Date' column to datetime to sort dates in descending order, dtype was object previously.
+3. Added additional keywords to make the category lists more robust. By including all expense emails from Scotiabank, many 'Uncategorized' rows came up. 
+4. Defined the function to categorize said expenses automatically.
+5. Created 'current month' variable to filter expenses for the ongoing month.
+6. Created a new column 'Transaction Month' to effectively group later.
+7. Grouped and summed expenses for the current month by 'Category' and 'Transaction Month'.
+8. Created a copy of the DataFrame 'current_month_expenses_df' to make sure changes were not done on the original to debug for 'SettingWithCopyWarning'.
+
+Current output:
+<img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/f0b026b7-2248-45db-8cc3-c3b120a378c7">
+
