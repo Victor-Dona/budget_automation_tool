@@ -7,9 +7,32 @@ import yaml
 import pandas as pd
 from datetime import datetime
 
-# This one outputs all emails from three addresses properly
+# 0.1. Creation of lists for expense categories.
+supermarkets_list = ['super', 'xtra', 'rey', 'pricesmart', 'metro', 'riba']
+eating_out_list = ['the raj', 'ay mi negra', 'casa santa', 'anti burger', 'tacos la neta', 'vitali', 'segundo muelle', 'souvlaki gr', 'golden unicorn', 'subway', 'esa flaca rica', 'food', 'sushi', 'tea', 'pizza', 'rest', 'pizzeria', 'tip', 'mo mo', 'ramen', 'rock and folk', 'bistro', 'coffee',
+                   'cafe unido', 'xing fu tang',
+                   'athanasiou', 'taphouse', 'wahaka', 'poke', 'popeyes', 'mcdonalds', 'taco bell', 'restaurant',
+                   'bakery', 'patisserie', 'la rana dorada', 'legitima', 'brew']
+department_stores_list = ['old navy', 'bananarepublic', 'hm', 'zara', 'steven']
+utilities_list = ['bershka', 'est multiplaza fideico', 'estacion', 'delta', 'texaco', 'cwp', 'tigo', 'liberty', 'sura']
+subscriptions_list = ['apple.com/bill', 'spotify']
+entertainment_list = ['burke bikes', 'cinepolis']
+random_purchases_list = ['innovacion', 'relojin', 'amzn', 'apple store']
+health = ['power club', 'orto']
+
+
+# 0.2. Creation of budget dictionary and dataframe transformation
+budget_2024 = {
+    'Categories':
+        ['Internet', 'Electricity', 'Data', 'Car loan', 'Car gas', 'Loan 1', 'Loan 2', 'Subscriptions', 'Savings',
+         'Groceries', 'Eating Out', 'Credit cards', 'Rent', 'Pets', 'Clothes', 'Entertainment'],
+    'Amount': [34.74, 50, 22.42, 220.42, 50, 188, 92.31, 12, 200, 150, 100, 300, 500, 30, 50, 30]
+}
+
+budget_2024_df = pd.DataFrame(budget_2024)
+
 # Block 1.1. Email connection and loading of credentials
-print("opening yaml for credentials")
+# print("opening yaml for credentials")
 with open('venv/credentials.yml') as f:
     content = f.read()
 
@@ -55,9 +78,9 @@ error_decoding_body_cnt = 0
 unexpected_error_cnt = 0
 cc_identifier = [4446, 2852]
 cc_identifier_as_string = [str(num) for num in cc_identifier]
-print(f'Bac Count = {bac_count}')
-print(f'Scotia Count = {scotia_count}')
-print(f'Other Scotia Emails Count = {other_email_cnt}')
+# print(f'Bac Count = {bac_count}')
+# print(f'Scotia Count = {scotia_count}')
+# print(f'Other Scotia Emails Count = {other_email_cnt}')
 
 expenses_data = []
 
@@ -82,7 +105,7 @@ for message in search_results:
         # print(f'From: {from_address}')
         # print(f'Subject: {subject}')
 
-        # Block 2.2. Body extraction.
+        # Block 2.2. Email extraction for BAC.
         # Definition of whether multipart or not as criterion 1 to know if it is from BAC or Scotiabank.
         if email_message.is_multipart() and 'credomatic-informa@pa.credomatic.com' in from_address:
             bac_count += 1
@@ -107,24 +130,24 @@ for message in search_results:
 
                         # Check if there is a match and print the result
                         if bac_store_name_match and bac_usd_amount_match and bac_transaction_date_match:
-                            bac_store_name = bac_store_name_match.group(1).strip()
+                            store_name = bac_store_name_match.group(1).strip()
                             bac_usd_amount = bac_usd_amount_match.group(1).strip()
                             bac_transaction_date = datetime.strptime(bac_transaction_date_match.group(1).strip(),
                                                                      '%Y/%m/%d-%H:%M:%S')
                             # print(f'Store Name: {bac_store_name}')
                             # print(f'USD Amount: {bac_usd_amount}')
                             # print(f'Transaction Date: {bac_transaction_date.strftime("%Y-%m-%d")}')
-                            expenses_data.append({'Store': bac_store_name, 'USD Amount': bac_usd_amount,
-                                   'Transaction Date': bac_transaction_date.strftime("%Y-%m-%d")})
+                            expenses_data.append({'Store': store_name, 'USD Amount': bac_usd_amount,
+                                                  'Transaction Date': bac_transaction_date.strftime("%Y-%m-%d")})
                         else:
-                            print(f'Unmatched BAC email - Subject: {subject}, Body: {body}')
-
+                            # print(f'Unmatched BAC email - Subject: {subject}, Body: {body}')
+                            pass
                         # print('Hola, soy de BAC, ciao.\n---')
                         # print(f'Body: {body}')
                     except UnicodeDecodeError as e:
                         print(f"Error decoding body: {e}")
                     break
-
+        # Block 2.3. Email extraction for Scotiabank.
         elif ('notificaciones@pa.scotiabank.com' in from_address
               and re.search(r'autorización de débito en tarjeta principal', subject, re.IGNORECASE)):
 
@@ -148,19 +171,20 @@ for message in search_results:
                             and scotiabank_store_name_match
                             and scotiabank_transaction_date_match):
                         scotiabank_usd_amount = scotiabank_usd_amount_match.group(1)
-                        scotiabank_store_name = scotiabank_store_name_match.group(1)
-                        scotiabank_transaction_date = datetime.strptime(scotiabank_transaction_date_match.group(1), '%d/%m/%Y')
+                        store_name = scotiabank_store_name_match.group(1)
+                        scotiabank_transaction_date = datetime.strptime(scotiabank_transaction_date_match.group(1),
+                                                                        '%d/%m/%Y')
                         # print(f'Store Name: {scotiabank_store_name}')
                         # print(f'USD Amount: {scotiabank_usd_amount}')
                         # print(f'Transaction Date: {scotiabank_transaction_date.strftime("%Y-%m-%d")}')
-                        expenses_data.append({'Store': scotiabank_store_name, 'USD Amount': scotiabank_usd_amount,
-                               'Transaction Date': scotiabank_transaction_date.strftime("%Y-%m-%d")})
+                        expenses_data.append({'Store': store_name, 'USD Amount': scotiabank_usd_amount,
+                                              'Transaction Date': scotiabank_transaction_date.strftime("%Y-%m-%d")})
                         scotia_count += 1
                     # print(f'Bac Count = {bac_count}')
                     # print(f'Scotia Count = {scotia_count}')
                     # print(f'Other email count: {other_email_cnt}')
                     else:
-                        print(f'Not a match - Subject: {subject}, Body: {body}')
+                        # print(f'Not a match - Subject: {subject}, Body: {body}')
 
                         # Try to extract information directly from the unmatched body
                         scotiabank_info_pattern = re.compile(
@@ -175,10 +199,10 @@ for message in search_results:
                             scotiabank_store_name = scotiabank_info_match.group(3)
                             scotiabank_transaction_date = datetime.strptime(scotiabank_info_match.group(4), '%d/%m/%Y')
 
-                            print(f'Last Digits: {scotiabank_last_digits}')
-                            print(f'Store Name: {scotiabank_store_name}')
-                            print(f'USD Amount: {scotiabank_usd_amount}')
-                            print(f'Transaction Date: {scotiabank_transaction_date.strftime("%Y-%m-%d")}')
+                            # print(f'Last Digits: {scotiabank_last_digits}')
+                            # print(f'Store Name: {scotiabank_store_name}')
+                            # print(f'USD Amount: {scotiabank_usd_amount}')
+                            # print(f'Transaction Date: {scotiabank_transaction_date.strftime("%Y-%m-%d")}')
                 else:
                     print('Not a match')
                     print(f'Body does not match the desired text: {body}')
@@ -196,41 +220,116 @@ for message in search_results:
     else:
         print(f'Fuck it, I am unable to fetch message {message}')
 
-expenses_data_dt = pd.DataFrame(expenses_data)
-print(expenses_data_dt)
-print(f'Bac Count = {bac_count}')
-print(f'Scotia Count = {scotia_count}')
-print(f'Other Scotia Emails Count = {other_email_cnt}')
-print(f'Error Decoding Body Count = {error_decoding_body_cnt}')
-print(f'Unexpected Error Count = {unexpected_error_cnt}')
+# Block 3.1 Data recount, analysis and ordering by latest transaction date.
+expenses_data_df = pd.DataFrame(expenses_data)
+expenses_data_df['Transaction Date'] = pd.to_datetime(expenses_data_df['Transaction Date'])
+expenses_data_df.sort_values(by='Transaction Date', inplace=True, ascending=False)
 
-for sender in email_addresses_to_extract:
-    if sender == 'credomatic-informa@pa.credomatic.com':
-        print('It is I')
-    else:
-        print('It is not I')
 
-    # Creation of category lists
-    supermarkets_list = ['super', 'xtra', 'rey', 'pricesmart', 'metro', 'riba']
-    eating_out_list = ['tea', 'pizza', 'rest', 'pizzeria', 'tip', 'mo mo', 'ramen', 'rock and folk', 'bistro', 'coffee',
-                       'cafe unido', 'xing fu tang',
-                       'athanasiou', 'taphouse', 'wahaka', 'poke', 'popeyes', 'mcdonalds', 'taco bell', 'restaurant',
-                       'bakery', 'patisserie', 'la rana dorada', 'legitima', 'brew']
-    department_stores_list = ['hm', 'zara', 'steven']
-    utilities_list = ['estacion', 'delta', 'texaco', 'cwp', 'tigo', 'liberty', 'sura']
-    subscriptions_list = ['apple', 'spotify']
-    entertainment_list = ['cinepolis']
-    random_purchases_list = ['innovacion', 'relojin']
-    health = ['power club', 'orto']
+# print(expenses_data_df)
+# print(expenses_data_df.dtypes)
 
-    # Creating dictionary with budget values per category
-    budget_2024 = {
-        'Categories':
-            ['Internet', 'Electricity', 'Data', 'Car loan', 'Car gas', 'Loan 1', 'Loan 2', 'Subscriptions', 'Savings',
-             'Groceries', 'Eating Out', 'Credit cards', 'Rent', 'Pets', 'Clothes', 'Entertainment'],
-        'Amount': [34.74, 50, 22.42, 220.42, 50, 188, 92.31, 12, 50, 170, 100, 300, 500, 30, 50, 30]
-    }
+# print(f'Bac Count = {bac_count}')
+# print(f'Scotia Count = {scotia_count}')
+# print(f'Other Scotia Emails Count = {other_email_cnt}')
+# print(f'Error Decoding Body Count = {error_decoding_body_cnt}')
+# print(f'Unexpected Error Count = {unexpected_error_cnt}')
 
-    # print('Printing general budget in a dataframe')
-    budget_2024_df = pd.DataFrame(budget_2024)
-    # print(budget_2024_df)
+# for sender in email_addresses_to_extract:
+#     if sender == 'credomatic-informa@pa.credomatic.com':
+#         print('It is I')
+#     else:
+#         print('It is not I')
+
+# print(budget_2024_df)
+
+
+# Block 3.2. Defining the categorize_expense
+def categorize_expense(store_name):
+    store_name = store_name.lower()
+
+    # Check for supermarkets
+    for keyword in supermarkets_list:
+        if keyword in store_name:
+            return 'Groceries'
+
+    # Check for eating out
+    for keyword in eating_out_list:
+        if keyword in store_name:
+            return 'Eating Out'
+
+    # Check for department stores
+    for keyword in department_stores_list:
+        if keyword in store_name:
+            return 'Clothes'
+
+    # Check for utilities
+    for keyword in utilities_list:
+        if keyword in store_name:
+            return 'Utilities'
+
+    # Check for subscriptions
+    for keyword in subscriptions_list:
+        if keyword in store_name:
+            return 'Subscriptions'
+
+    # Check for entertainment
+    for keyword in entertainment_list:
+        if keyword in store_name:
+            return 'Entertainment'
+
+    # Check for random purchases
+    for keyword in random_purchases_list:
+        if keyword in store_name:
+            return 'Random purchases'
+
+    # Check for health related purchases
+    for keyword in health:
+        if keyword in store_name:
+            return 'Health'
+
+    # Add more categories and checks as needed
+
+    # If no match is found, return 'Uncategorized'
+    return 'Uncategorized'
+
+
+# Block 3.3. Adding the 'Category' column and applying the function categorize_expense
+expenses_data_df['Category'] = expenses_data_df['Store'].apply(categorize_expense)
+
+# Block 4. Filtering
+# Block 4.1. Creation of today dynamic date reference
+today = datetime.now().date()
+# current_month = pd.Period(today.strftime('%Y-%m'))
+current_month = today.strftime('%Y-%m')
+# current_month2 = current_month + 1
+print(current_month)
+
+# Printing all expenses
+# print(expenses_data_df.to_string())
+
+# Block 4.2. Filtering for current month expenses
+# Printing current month expenses
+current_month_expenses_df = expenses_data_df[expenses_data_df['Transaction Date'].dt.strftime('%Y-%m').str.startswith(current_month)].copy()
+print('Printing expenses for the current month')
+print(current_month_expenses_df.to_string())
+
+# Block 4.3. Grouping current month expenses
+current_month_expenses_df.loc[:, 'Transaction Date'] = pd.to_datetime(current_month_expenses_df['Transaction Date'])
+
+current_month_expenses_df.loc[:, 'Transaction Month'] = current_month_expenses_df['Transaction Date'].dt.to_period('M').copy()
+
+# Convert 'USD Amount' to numeric, coercing errors to NaN for non-numeric values
+current_month_expenses_df.loc[:, 'USD Amount'] = pd.to_numeric(current_month_expenses_df['USD Amount'], errors='coerce')
+
+# Drop rows with NaN values in the 'USD Amount' column
+current_month_expenses_df = current_month_expenses_df.dropna(subset=['USD Amount'])
+
+# Group and sum the 'USD Amount' based on 'Category' and 'Transaction Month'
+current_month_expenses_df = current_month_expenses_df.groupby(['Category', 'Transaction Month'], as_index=False)['USD Amount'].sum()
+
+# Print the result
+print(current_month_expenses_df)
+
+uncategorized_expenses = expenses_data_df[expenses_data_df['Category'] == 'Uncategorized']
+# print(uncategorized_expenses.to_string())
