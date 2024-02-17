@@ -3,6 +3,7 @@
 Greetings, fellow living being,
 
 This project started as an extension of a habit I had of tracking my expenses in an Excel sheet (as destiny mandates), and the fact that, albeit a reflecting exercise, it was too manually upload my expenses. It eventually became a tedious task. Therefore, in this project, I look forward to:
+
 1. Automating the expenses tracking process by extracting the emails sent by banks and putting them all in a dataframe.
 2. Matching said expenses to the fictional budget created and returning a difference every time a transaction is made.
 3. Finally, sending a message to the messaging app of preference (WhatsApp will be used for this project) and in said message establishing the remaining budget amounts for each category to make the user aware of the available amounts left for the current month.
@@ -35,11 +36,11 @@ After the grouping has been done, a for loop is created with the variable catego
 Moreover, the only categories that have been matched so far have been Eating Out and Subscriptions. The final two dataframes look as follows:
 ![image](https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/243f82c2-7834-4315-ad28-8667b42cc345)
 
-
 February 11th. 2024.
 In these past few days I've encountered several new issues and solutions. I will briefly summarize them here:
+
 1. Change of email address selection method
-   I went from having a single key and value with my_mail.search() method to creating a list with the desired addresses to receive emails from and then running a for loop through, it only appending mails to a newly created empty list, called search_results_list, if the status of the method was 'OK'. This allows the versatility of having as many senders as desired with only having to include them in email_addresses_to_extract. 
+   I went from having a single key and value with my_mail.search() method to creating a list with the desired addresses to receive emails from and then running a for loop through, it only appending mails to a newly created empty list, called search_results_list, if the status of the method was 'OK'. This allows the versatility of having as many senders as desired with only having to include them in email_addresses_to_extract.
 2. Creation of counts to monitor the type of data being handled and debug. Had four categorie that included the following:
    <img width="498" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/2b8c3c50-5684-4fd0-bf52-64e31daad4b1">
 3. Learnt to use try: and except: to find and handle anormalities. Scotiabank sends several types of mails through the same sender which had the code return errors constantly, given that we only wanted to extract credit cards statements. So monthly statements, payments to the credit card and other type of emails began posing error problems.
@@ -76,6 +77,7 @@ This way, our code's output is updated to
 
 It is through this that I see a disparity in the total amount of rows in the dataframe and the amount of emails totaled in the count below.
 Upon further inspection, two issues arise:
+
 1. Unmatched BAC emails due to a lack of matching in the USD amount (in Colombian Pesos).
    <img width="960" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/cb0350c8-919b-4fe4-8b71-160caa979e1d">
 2. Mismatch in Scotiabank's emails due to establishment names beginning with numbers.
@@ -90,14 +92,13 @@ Address regex pattern issues for both banks to include other currencies.
 Make establishment name collection more flexible to allow names beginning with numbers.
 This journey continues...
 
-
 February 12th, 2024.
-Today was a great day for debugging and deepening knowledge about filtering, loc, and the legendary 'SettingWithCopyWarning: 
-A value is trying to be set on a copy of a slice from a DataFrame' that pops up when slicing through a view instead of the main DataFrame in pandas. 
+Today was a great day for debugging and deepening knowledge about filtering, loc, and the legendary 'SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame' that pops up when slicing through a view instead of the main DataFrame in pandas.
 
 1. Added the new category column
 2. Transformed the 'Transaction Date' column to datetime to sort dates in descending order, dtype was object previously.
-3. Added additional keywords to make the category lists more robust. By including all expense emails from Scotiabank, many 'Uncategorized' rows came up. 
+3. Added additional keywords to make the category lists more robust. By including all expense emails from Scotiabank, many 'Uncategorized' rows came up.
 4. Defined the function to categorize said expenses automatically.
 5. Created 'current month' variable to filter expenses for the ongoing month.
 6. Created a new column 'Transaction Month' to effectively group later.
@@ -107,3 +108,67 @@ A value is trying to be set on a copy of a slice from a DataFrame' that pops up 
 Current output:
 <img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/f0b026b7-2248-45db-8cc3-c3b120a378c7">
 
+## Getting Started
+
+To run this project locally, you have two options:
+
+- Use VS Code's Dev Container [Prefered].
+
+- Create your own virtual environment.
+
+### Using a Dev Container in VS Code
+
+The Visual Studio Code Dev Containers extension lets you use a container as a full-featured development environment. It allows you to open any folder inside (or mounted into) a container and take advantage of Visual Studio Code's full feature set.
+
+![image](https://code.visualstudio.com/assets/docs/devcontainers/containers/architecture-containers.png)
+
+#### Requirements
+
+- Docker installed locally.
+- VS Code Dev Containers Extension.
+
+For more, please refer to: [System Requirements](https://code.visualstudio.com/docs/devcontainers/containers#_system-requirements)
+
+#### Usage
+
+If you meet the requirements, you can get started by just opening this project in VS Code, and selecting `Open in Dev Container`.
+
+If the message above doesn't appear, you can press: `ctrl + shift + p` in your keyboard and type: `dev container`.
+Select: `Open in Dev Container`.
+
+This should display a status bar like example below:
+![image](https://code.visualstudio.com/assets/docs/devcontainers/containers/dev-container-progress.png)
+
+After the container starts successfully, you are ready to use and add features to the code.
+
+### Create a Virtual Environment
+
+Open the terminal and run the following commands:
+
+1. Create virtual environment
+
+    ```bash
+    python -m venv .venv
+    ```
+
+2. Activate virtual environment
+
+    - For Windows:
+
+        ```powershell
+        .venv/Scripts/activate
+        ```
+
+    - For Mac/Linux:
+
+        ```bash
+        source .venv/bin/activate
+        ```
+
+3. Install dependencies
+
+    ```bash
+    python -m pip install -r requirements.txt
+    ```
+
+After the dependencies install successfully, you are ready to use and add features to the code.
