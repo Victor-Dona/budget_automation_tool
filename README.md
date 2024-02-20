@@ -20,7 +20,8 @@ After that, I created a new column in my expenses_df categorizing each expense r
 
 Additionally, I modified the date to exclude the time and only add YYYY-MM in a new column called 'Date'. This way I can use this same column for filtering later. The objective is for this to be a variable that refreshes itself every time a month begins so that no changes have to be done to the code date-wise. This last bit is accomplished through the variable current_month.
 
-![image](https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/7a114682-4aa1-4347-8748-78d6bd2a88ba)
+<img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/08a144aa-3daa-4251-a774-4f7edef4cb3a">
+<img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/0201b4bd-9b90-4b26-9a37-f34fcf13d7ca">
 
 It is worth noting that, as can be seen above. Out of the almost 100 mails extracted, the two regex patterns currently used seem to be leaving out 7 emails, which is something that I must look into later. Why are these emails with no match if all emails are supposed to have the same formatting? Must inquire.
 
@@ -106,4 +107,13 @@ A value is trying to be set on a copy of a slice from a DataFrame' that pops up 
 
 Current output:
 <img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/f0b026b7-2248-45db-8cc3-c3b120a378c7">
+
+Since February 14th, 2024.
+1. Explored posibilities of automating with AWS Lambda funcions. Through exploration, it is safe to conclude that although a useful too, it is a hammer too big for the nail. In other words, a simpler tool will do, that's why I resorted to a CRONJOB.
+2. Larned how to set cronjobs through the nano editor to create a cron_log.
+3. Created a shell script file to ease the creation and management of the cronjob.
+utput:
+<img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/8c9c78ec-5c57-4907-ac0e-3fb84e01623d">
+4. Transformed last remaining balances dictionary into a dataframe to have the last bit of code to show as:
+<img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/31b47e64-8d1c-487f-b4c2-ba91d00e5f4c">
 
