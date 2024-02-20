@@ -111,9 +111,10 @@ Current output:
 Since February 14th, 2024.
 1. Explored posibilities of automating with AWS Lambda funcions. Through exploration, it is safe to conclude that although a useful too, it is a hammer too big for the nail. In other words, a simpler tool will do, that's why I resorted to a CRONJOB.
 2. Larned how to set cronjobs through the nano editor to create a cron_log.
-3. Created a shell script file to ease the creation and management of the cronjob.
-utput:
+3. Fixed issues with library dependencies in Pycharm by working with Anaconda and its package manager Condas. 
+4. Created a shell script file to ease the creation and management of the cronjob.
+Output:
 <img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/8c9c78ec-5c57-4907-ac0e-3fb84e01623d">
-4. Transformed last remaining balances dictionary into a dataframe to have the last bit of code to show as:
+5. Transformed last remaining balances dictionary into a dataframe to have the last bit of code to show as:
 <img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/31b47e64-8d1c-487f-b4c2-ba91d00e5f4c">
 
