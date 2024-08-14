@@ -1,14 +1,19 @@
-# budget_automation_tool
+# Budget Automation Project
 
 Greetings, fellow living being,
 
-This project started as an extension of a habit I had of tracking my expenses in an Excel sheet (as destiny mandates), and the fact that, albeit a reflecting exercise, it was too manually upload my expenses. It eventually became a tedious task. Therefore, in this project, I look forward to:
-1. Automating the expenses tracking process by extracting the emails sent by banks and putting them all in a dataframe.
-2. Matching said expenses to the fictional budget created and returning a difference every time a transaction is made.
-3. Finally, sending a message to the messaging app of preference (WhatsApp will be used for this project) and in said message establishing the remaining budget amounts for each category to make the user aware of the available amounts left for the current month.
+After manually inputing my expenses in an Excel sheet for years, I decided to create a workflow that solves the need to input expenses manually by extracting them from the invoices sent by email.
 
-Disclaimer: all expenses and transactions for this project are fictional and have been fabricated for scientific purposes.
+I established the following objectives as the success criteria for the project:
 
+   1. Automating the extraction process of expenses with a Python script and converting the result into a dataframe for weekly budget revisions.
+   2. Creating a Python script that formats and unifies each monthly statement by bank.
+   3. Creating an Excel that compares month to month budgets with expenses. The comparison yields an efficiency metric that establishes budget compliance.
+
+
+<details>
+<summary>Process details.</summary>
+<br>
 Results as of January 29th, 2024.
 Transformed extracted emails into a dataframe.
 <img width="1352" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/df17a8aa-a0b2-4d42-ae9c-33597634abd5">
@@ -91,7 +96,6 @@ Address regex pattern issues for both banks to include other currencies.
 Make establishment name collection more flexible to allow names beginning with numbers.
 This journey continues...
 
-
 February 12th, 2024.
 Today was a great day for debugging and deepening knowledge about filtering, loc, and the legendary 'SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame' that pops up when slicing through a view instead of the main DataFrame in pandas. 
@@ -117,4 +121,11 @@ Output:
 <img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/8c9c78ec-5c57-4907-ac0e-3fb84e01623d">
 5. Transformed last remaining balances dictionary into a dataframe to have the last bit of code to show as:
 <img width="1014" alt="image" src="https://github.com/Victor-Dona/budget_automation_tool/assets/158128371/31b47e64-8d1c-487f-b4c2-ba91d00e5f4c">
+
+
+</details>
+
+
+
+
 
